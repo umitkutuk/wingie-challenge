@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Developer;
 use App\Models\Todo;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -32,15 +33,23 @@ class AssignTodoToDeveloper implements ShouldQueue
      */
     public function handle()
     {
-        Todo::query()
+        $todos = Todo::query()
             ->whereNull('developer_id')
-            ->chunk(100, function ($todos) {
-                foreach ($todos as $todo)
-                {
-                    $developer = Developer::query()
-                        ->orderBy('first_available_at')
-                        ->first();
-                }
-            });
+            ->get();
+
+        foreach ($todos as $todo)
+        {
+            $developer = Developer::query()
+                ->orderBy('total_assign_hour')
+                ->first();
+
+            $todo->update([
+                'developer_id' => $developer->id
+            ]);
+
+            $developer->update([
+                'total_assign_hour' => ($developer->total_assign_hour + ($todo->estimated_duration / $developer->level))
+            ]);
+        }
     }
 }

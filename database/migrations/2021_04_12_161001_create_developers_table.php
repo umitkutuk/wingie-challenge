@@ -18,6 +18,7 @@ class CreateDevelopersTable extends Migration
             $table->string('name');
             $table->unsignedTinyInteger('level');
             $table->timestamp('first_available_at')->nullable();
+            $table->unsignedDecimal('total_assign_hour')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

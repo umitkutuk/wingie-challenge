@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'work_hour' => 45,
+    'start_at' => "09:00",
+    'end_at' => "18:00",
+
     'integrations' => [
         [
             'name' => env('MOCKY1_NAME'),

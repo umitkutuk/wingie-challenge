@@ -15,10 +15,15 @@ class Developer extends Model
         'name',
         'level',
         'first_available_at',
+        'total_assign_hour',
     ];
 
     protected $dates = [
         'first_available_at',
+    ];
+
+    protected $casts = [
+        'total_assign_hour' => 'float'
     ];
 
     /**
@@ -26,6 +31,6 @@ class Developer extends Model
      */
     public function todos(): HasMany
     {
-        return $this->hasMany('todos');
+        return $this->hasMany(Todo::class);
     }
 }
